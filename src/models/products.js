@@ -20,8 +20,8 @@ async function create() {
   }
 }
 
-async function insert(name, price, seller) {
-  await pool.execute('INSERT INTO Products (Name, Price, Seller) VALUES (?, ?, ?);', [name, price, seller]);
+async function insert(name, price, seller, category) {
+  await pool.execute('INSERT INTO Products (Name, Price, Seller, Category) VALUES (?, ?, ?, ?);', [name, price, seller, category]);
 }
 
 async function select(query) {
