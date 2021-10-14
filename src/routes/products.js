@@ -17,7 +17,6 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', authorization('client', 403), bodyParser.urlencoded({ extended : false }), async (req, res) => {
-  console.log(typeof req.body.category);
   if (!isValid(req.body.product, /^[\w ]*$/) || !isValid(req.body.price, /^[0-9]*([.,][0-9]{2,2})?$/)) {
     res.status(400).send();
   }

@@ -4,8 +4,8 @@ async function create() {
   try {
     await pool.query(`CREATE TABLE Carts (
       Username CHAR(32) NOT NULL,
-      Product_id INT UNSIGNED,
-      Quantity INT UNSIGNED,
+      Product_id INT UNSIGNED NOT NULL,
+      Quantity INT UNSIGNED NOT NULL,
       PRIMARY KEY (Username, Product_id),
       FOREIGN KEY (Username) REFERENCES Users (Username),
       FOREIGN KEY (Product_id) REFERENCES Products (id)

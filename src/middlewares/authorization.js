@@ -10,11 +10,21 @@ const authorization = (type, code) => {
         next();
       }
       else {
-        res.status(code).send();
+	if(code) {
+          res.status(code).send();
+	}
+	else {
+          next();
+	}
       }
     }
     else{
-      res.status(code).send();
+      if(code) {
+        res.status(code).send();
+      }
+      else {
+        next();
+      }
     }
   }
 };

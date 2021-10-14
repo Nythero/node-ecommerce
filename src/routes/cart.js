@@ -1,24 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const carts = require('../models/carts.js');
-const sessions = require('../models/sessions.js');
 
 //Middlewares
 const bodyParser = require('body-parser');
+const bodyValidation = require('../middlewares/bodyValidation.js');
+const authorization = require('../middlewares/authorization.js');
 
-router.post('/', bodyParser.urlencoded({ extended : false }), (req, res) => {
-  if (req.cookies.sid) {
-    //Insertar en carts el username del cookie sid, el id del producto del body y quantity del body
-    insert(sessions.select(req.cookies.sid), req.body.product_id, req.body.quantity);
-  }
-  else {
+//Controller
+const carts = require('../controllers/carts.js');
 
-  }
-});
+const numberRegex = /^[0-9]*$/;
+const bodyValidationParameters = [{name: 'product_id', regex: numberRegex}, {name: 'quantity', regex: numberRegex}];
 
-router.get('/', (req, res) => {
-  res.status(200);
-  res.send();
-});
+router.post('/', authorization('client'), bodyParser.urlencoded({ extended : false }), bodyValidation(bodyValidationParameters), carts.insert);
+
+router.get('/', carts.getSite);
 
 module.exports = router;
