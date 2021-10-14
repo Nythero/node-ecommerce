@@ -16,6 +16,7 @@ const categories = require('./routes/categories.js');
 //Middleware
 const cookieParser = require('cookie-parser');
 const handleErrors = require('./middlewares/handleErrors.js');
+const handleSqlErrors = require('./middlewares/handleSQLErrors.js');
 
 app.use('/', (req, res, next) => {
   console.log(req.path);
@@ -33,6 +34,7 @@ app.use('/products', products);
 app.use('/cart', cart);
 app.use('/', index);
 app.use('*', notFound);
+app.use(handleSqlErrors);
 app.use(handleErrors);
 
 app.listen(process.env.PORT, () => console.log(`Server working on http://localhost:${process.env.PORT}`));

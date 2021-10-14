@@ -13,7 +13,7 @@ router.get('/', redirectToIndex, (req, res) => {
   res.status(200).sendFile('./public/register.html', {root : './src/'});
 });
 
-router.post('/', bodyParser.urlencoded({ extended : false }), async (req, res) => {
+router.post('/', bodyParser.urlencoded({ extended : false }), async (req, res, next) => {
   if(!isValid(req.body.username, /^[\w-\.]{1,32}$/) || !isValid(req.body.secret, /^[A-Za-z0-9#?!@$ %^&*-]{8,32}$/)) {
     res.status(400).sendFile('./public/register.html', {root : './src/'});
     return;
@@ -26,12 +26,7 @@ router.post('/', bodyParser.urlencoded({ extended : false }), async (req, res) =
     res.status(201).send();
   }
   catch (err) {
-    if (err.errno === 1062) {
-      res.status(422).sendFile('./public/register.html', {root : './src/'});
-    }
-    else {
-      throw err;
-    }
+    next(err);
   }
 });
 

@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
   res.send();
 });
 
-router.post('/', authorization('client', 403), bodyParser.urlencoded({ extended : false }), async (req, res) => {
+router.post('/', authorization('client', 403), bodyParser.urlencoded({ extended : false }), async (req, res, next) => {
   if (!isValid(req.body.product, /^[\w ]*$/) || !isValid(req.body.price, /^[0-9]*([.,][0-9]{2,2})?$/)) {
     res.status(400).send();
   }
@@ -26,16 +26,7 @@ router.post('/', authorization('client', 403), bodyParser.urlencoded({ extended 
       res.status(201).send();
     }
     catch (err) {
-      console.log(err.errno === 1452);
-      if(err.errno === 1452) {
-        res.status(404).send();
-      }
-      else if (err.erno === 1062){
-        res.status(422).send();
-      }
-      else {
-        throw err;
-      }
+      next(err);
     }
   }
 });
