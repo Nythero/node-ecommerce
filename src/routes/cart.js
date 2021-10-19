@@ -16,4 +16,6 @@ router.post('/', authorization('client'), bodyParser.urlencoded({ extended : fal
 
 router.get('/', carts.getSite);
 
+router.delete('/', authorization('client', 403), bodyParser.urlencoded({ extended : false }), bodyValidation([bodyValidationParameters[0]]), carts.delete);
+
 module.exports = router;

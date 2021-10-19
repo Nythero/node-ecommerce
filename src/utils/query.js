@@ -13,8 +13,6 @@ class QueryWhere {
       let operand = (i == entries.length - 1)? "" : ((i % 2 == 0)? ' OR' : ' AND');
       string += ` ${entries[i][0]} LIKE "%${entries[i][1]}%"${operand}`;
     }
-    for(let property in this) {
-    }
     return string;
   }
 }
