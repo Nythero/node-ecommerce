@@ -6,5 +6,10 @@ pipeline {
                 bat 'npm --version'
             }
         }
+	stage('test') {
+	    steps {
+	    	bat 'npm test'
+            }
+	}
     }
 }
