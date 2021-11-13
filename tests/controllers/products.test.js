@@ -9,8 +9,9 @@ beforeAll(() => {
   jest.mock('../../src/models/products.js', () => {
     return {
       selectId: jest.fn(),
-      select: jest.fn()
-      
+      select: jest.fn(),
+      insert: jest.fn()
+
     }
   })
 
@@ -21,13 +22,14 @@ beforeAll(() => {
   productDto = require('../../src/Dtos/products.js')
   
   reqMock = {
-    params: {}
+    params: {},
+    body: {}
   } 
   resMock = {
     status: jest.fn(),
     send: jest.fn(),
     json: jest.fn(),
-    locals: {}
+    locals: { user : {}}
   }
   
   resMock.status.mockReturnThis()
@@ -84,4 +86,26 @@ test('Should call products.select and call next', async () => {
   expect(resMock.status).not.toHaveBeenCalled()
   expect(resMock.json).not.toHaveBeenCalled()
   expect(nextMock).toHaveBeenCalledWith(expect.any(Error))
+})
+
+test('Should call products.insert and send a response with status code 201', async () => {
+  await products.insert(reqMock, resMock, nextMock)
+
+  expect(productsModels.insert).toHaveBeenCalled()
+  expect(resMock.status).toHaveBeenCalledWith(201)
+  expect(resMock.send).toHaveBeenCalled()
+  expect(nextMock).not.toHaveBeenCalled()
+})
+
+test('Should call products.insert and call next', async () => {
+  productsModels.insert.mockImplementation(() => {
+    throw new Error()
+  })
+
+  await products.insert(reqMock, resMock, nextMock)
+
+  expect(productsModels.insert).toHaveBeenCalled()
+  expect(resMock.status).not.toHaveBeenCalledWith(201)
+  expect(resMock.send).not.toHaveBeenCalled()
+  expect(nextMock).toHaveBeenCalled()
 })
