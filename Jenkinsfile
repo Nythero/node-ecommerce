@@ -16,7 +16,7 @@ pipeline {
 	    steps {
 	    	bat 'npm test'
 		bat "docker run -d --rm -e MYSQL_ROOT_PASSWORD=${MYSQLPASSWORD} -e MYSQL_DATABASE=${DATABASE} -p ${PORT}:3306 --name mysql-test mysql"
-		bat 'npm server'
+		bat 'npm run server'
             }
 	}
     }
