@@ -36,6 +36,7 @@ const productsController = {
   remove: async (req, res, next) => {
     try {
       await products.remove(req.params.id);
+      res.status(204).send();
     }
     catch (err) {
       next(err);

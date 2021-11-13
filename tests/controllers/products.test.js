@@ -10,8 +10,8 @@ beforeAll(() => {
     return {
       selectId: jest.fn(),
       select: jest.fn(),
-      insert: jest.fn()
-
+      insert: jest.fn(),
+      remove: jest.fn()
     }
   })
 
@@ -106,6 +106,28 @@ test('Should call products.insert and call next', async () => {
 
   expect(productsModels.insert).toHaveBeenCalled()
   expect(resMock.status).not.toHaveBeenCalledWith(201)
+  expect(resMock.send).not.toHaveBeenCalled()
+  expect(nextMock).toHaveBeenCalled()
+})
+
+test('Should call products.remove and send response with status code 204', async () => {
+  await products.remove(reqMock, resMock, nextMock)
+
+  expect(productsModels.remove).toHaveBeenCalled()
+  expect(resMock.status).toHaveBeenCalledWith(204)
+  expect(resMock.send).toHaveBeenCalled()
+  expect(nextMock).not.toHaveBeenCalled()
+})
+
+test('Should call products.remove and call next', async () => {
+  productsModels.remove.mockImplementation(() => {
+    throw new Error()
+  })
+
+  await products.remove(reqMock, resMock, nextMock)
+
+  expect(productsModels.remove).toHaveBeenCalled()
+  expect(resMock.status).not.toHaveBeenCalledWith()
   expect(resMock.send).not.toHaveBeenCalled()
   expect(nextMock).toHaveBeenCalled()
 })
