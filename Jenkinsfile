@@ -9,13 +9,13 @@ pipeline {
         }
 	stage('test') {
 	    environment {
-	  	PORT = 5000
 		MYSQLPASSWORD = 123456	
+		MYSQLPORT = 5000
 		DATABASE = 'test'
 	    }
 	    steps {
 	    	bat 'npm test'
-		bat "docker run -d --rm -e MYSQL_ROOT_PASSWORD=${MYSQLPASSWORD} -e MYSQL_DATABASE=${DATABASE} -p ${PORT}:3306 --name mysql-test mysql"
+		bat "docker run -d --rm -e MYSQL_ROOT_PASSWORD=${MYSQLPASSWORD} -e MYSQL_DATABASE=${DATABASE} -p ${MYSQLPORT}:3306 --name mysql-test mysql"
 		bat 'npm run server'
             }
 	}
