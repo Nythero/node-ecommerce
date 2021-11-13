@@ -47,5 +47,17 @@ test('Should call products.select and send response with 200 status code', async
   expect(productsModels.selectId).toHaveBeenCalled()
   expect(resMock.status).toHaveBeenCalledWith(200)
   expect(resMock.json).toHaveBeenCalledWith(expect.any(productDto))
+})
 
+test('Should call products.select and call next', async () => {
+  productsModels.selectId.mockImplementation(() => {
+    throw new Error()
+  })
+
+  await products.getWithId(reqMock, resMock, nextMock)
+
+  expect(productsModels.selectId).toHaveBeenCalled()
+  expect(resMock.status).not.toHaveBeenCalled()
+  expect(resMock.json).not.toHaveBeenCalled()
+  expect(nextMock).toHaveBeenCalledWith(expect.any(Error))
 })
