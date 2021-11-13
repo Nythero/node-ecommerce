@@ -39,7 +39,7 @@ app.use(handleErrors);
 */
 let main = async () => {
   database.init();
-  await require('./models/connection.js').checkConnection();
+  await require('./models/connection.js').checkConnection(process.env.MYSQLATTEMPTS, process.env.MYSQLTIMEOUT);
   app.listen(process.env.PORT, () => console.log(`Server working on http://localhost:${process.env.PORT}`));
 }
 

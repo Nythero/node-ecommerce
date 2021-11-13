@@ -14,6 +14,8 @@ pipeline {
 		DATABASE = 'test'
 		PORT = 3000
 		MYSQLUSER = 'root'
+		MYSQLTIMEOUT = 5000
+		MYSQLATTEMPTS = 3
 	    }
 	    steps {
 	    	bat 'npm test'
