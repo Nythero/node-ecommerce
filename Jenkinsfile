@@ -21,5 +21,10 @@ pipeline {
 		bat 'npm run server'
             }
 	}
+	post {
+	    always {
+		bat 'docker stop mysql-test'
+	    }
+	}
     }
 }
