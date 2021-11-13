@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-		bat 'docker build -t node-test'
+		bat 'docker build -t node-test -f Dockerfile'
 		bat 'docker pull mysql'
 		bat 'npm test'
             }
