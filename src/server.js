@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-require('./models/database.js').init();
-
+const database = require('./models/database.js');
+/*
 //Routes
 const index = require('./routes/index.js');
 const login = require('./routes/login.js');
@@ -36,5 +36,11 @@ app.use('/', index);
 app.use('*', notFound);
 app.use(handleSqlErrors);
 app.use(handleErrors);
+*/
+let main = async () => {
+  database.init();
+  await require('./models/connection.js').checkConnection();
+  app.listen(process.env.PORT, () => console.log(`Server working on http://localhost:${process.env.PORT}`));
+}
 
-app.listen(process.env.PORT, () => console.log(`Server working on http://localhost:${process.env.PORT}`));
+main();

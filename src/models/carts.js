@@ -1,7 +1,7 @@
-const pool = require('./connection.js');
+const pool = require('./connection.js').pool;
 
 const carts = {
-  create: async () => {
+  async create() {
     try {
       await pool.query(`CREATE TABLE Carts (
         Username CHAR(32) NOT NULL,
@@ -19,23 +19,25 @@ const carts = {
     }
   },
 
-  insert: async (username, product, quantity) => {
+  async insert(username, product, quantity) {
     await pool.execute('INSERT INTO Carts (Username, Product_id, Quantity) VALUES (?, ?, ?);', [username, product, quantity]);
   },
 
-  select: async (username) => {
+  async select(username) {
     return await pool.execute('SELECT * FROM Carts WHERE Username = ?;', [username]);
   },
 
-  delete: async (username, product) => {
+  async delete(username, product) {
     await pool.execute('DELETE FROM Carts WHERE Username = ? AND Product_id = ?;', [username, product]);
   },
 
-  exists: async (username, product) => {
+  async exists(username, product) {
     let [rows, fields] = await pool.execute('SELECT * FROM Carts WHERE Username = ? AND Product_id = ?;', [username, product]);
 
     return rows[0] !== undefined && rows[0] !== null;
   }
 };
+
+pool.once('MySQLServerReady', () => carts.create());
 
 module.exports = carts;

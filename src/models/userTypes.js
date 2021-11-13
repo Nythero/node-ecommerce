@@ -1,41 +1,44 @@
-const pool = require('./connection.js');
+const pool = require('./connection.js').pool;
 
-async function create() {
-  try {
-    await pool.query(`CREATE TABLE Types (
-      Id CHAR(32),
-      PRIMARY KEY (Id)
-    );`);
-  }
-  catch (err) {
-    if (err.errno !== 1050) {
-      throw err;
+const userTypes = {
+  async create() {
+    try {
+      await pool.query(`CREATE TABLE Types (
+        Id CHAR(32),
+        PRIMARY KEY (Id)
+      );`);
     }
-  }
-}
-
-async function init() {
-  try {
-    await insert('admin');
-    await insert('client');
-  }
-  catch (err) {
-    if (err.errno !== 1062) {
-      throw err;
+    catch (err) {
+      if (err.errno !== 1050) {
+        throw err;
+      }
     }
+  },
+
+  async init (){
+    try {
+      await this.insert('admin');
+      await this.insert('client');
+    }
+    catch (err) {
+      if (err.errno !== 1062) {
+        throw err;
+      }
+    }
+  },
+
+  async insert(id){
+    await pool.execute('INSERT INTO Types (Id) VALUES (?);', [id]);
+  },
+
+  async select(id){
+    return await pool.execute('SELECT * FROM Type WHERE Id = ?', [id]);
   }
 }
 
-async function insert(id) {
-  await pool.execute('INSERT INTO Types (Id) VALUES (?);', [id]);
-}
+pool.once('MySQLServerReady', async () => {
+  await userTypes.create();
+  await userTypes.init();
+});
 
-async function select(id) {
-  return await pool.execute('SELECT * FROM Type WHERE Id = ?', [id]);
-}
-
-module.exports = {
-  create : create,
-  select : select,
-  init : init
-};
+module.exports = userTypes;
