@@ -25,7 +25,7 @@ const checkConnection = async (attempts = 3, time = 1000) => {
       await timeout(time);
     }
   }
-  pool.emit('MySQLServerReady', pool);
+  pool.emit('MySQLServerReady');
 };
 
 module.exports.checkConnection = checkConnection;

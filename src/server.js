@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-const database = require('./models/database.js');
-/*
+require('./models/database.js').init();
+
 //Routes
 const index = require('./routes/index.js');
 const login = require('./routes/login.js');
@@ -36,9 +36,8 @@ app.use('/', index);
 app.use('*', notFound);
 app.use(handleSqlErrors);
 app.use(handleErrors);
-*/
+
 let main = async () => {
-  database.init();
   await require('./models/connection.js').checkConnection(process.env.MYSQLATTEMPTS, process.env.MYSQLTIMEOUT);
   app.listen(process.env.PORT, () => console.log(`Server working on http://localhost:${process.env.PORT}`));
 }
