@@ -1,0 +1,12 @@
+#Generated Vim
+*~
+*swp
+*swp~
+*swo
+
+#Environment
+.env
+
+#Generated NodeJs
+node_modules
+
