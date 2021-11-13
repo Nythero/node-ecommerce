@@ -12,6 +12,8 @@ pipeline {
 		MYSQLPASSWORD = 123456	
 		MYSQLPORT = 5000
 		DATABASE = 'test'
+		PORT = 3000
+		MYSQLUSER = 'root'
 	    }
 	    steps {
 	    	bat 'npm test'
