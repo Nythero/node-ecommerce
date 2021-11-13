@@ -3,8 +3,9 @@ pipeline {
     stages {
         stage('build') {
             steps {
-		bat 'npm install'
+		bat 'docker build -t node-test'
 		bat 'docker pull mysql'
+		bat 'npm test'
             }
         }
 	stage('test') {
@@ -18,15 +19,15 @@ pipeline {
 		MYSQLATTEMPTS = 3
 	    }
 	    steps {
-	    	bat 'npm test'
 		bat "docker run -d --rm -e MYSQL_ROOT_PASSWORD=${MYSQLPASSWORD} -e MYSQL_DATABASE=${DATABASE} -p ${MYSQLPORT}:3306 --name mysql-test mysql"
-                bat 'SCHTASKS /Create /RU SYSTEM /SC ONSTART /TN Node /TR "npm run server"'
+		bat "docker run -d --rm --name node-test node-test"
             }
 	}
     }
     post {
 	always {
     	    bat 'docker stop mysql-test'
+            bat 'docker stop node-test'
         }
     }
 }

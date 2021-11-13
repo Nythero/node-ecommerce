@@ -1,0 +1,13 @@
+#Generated (Node)
+node_modules
+.env
+
+#Generated (Vim)
+*~
+*.swp
+
+#Generated (Jenkins)
+Jenkinsfile
+
+*.bat
+scripts
