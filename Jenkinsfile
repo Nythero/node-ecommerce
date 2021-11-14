@@ -29,7 +29,7 @@ pipeline {
 	    }
 	    steps {
 		bat "docker run -d --rm -e MYSQL_ROOT_PASSWORD=${MYSQLPASSWORD} -e MYSQL_DATABASE=${DATABASE} -p ${MYSQLPORT}:3306 --name mysql-test mysql"
-		bat "docker run -d --rm -p ${PORT}:${PORT} --name node-test node-test"
+		bat "docker run -d --rm -p ${PORT}:${PORT} -e MYSQLPASSWORD -e MYSQLPORT -e DATABASE -e PORT -e MYSQLUSER -e MYSQLTIMEOUT -e MYSQLATTEMPTS --name node-test node-test"
             }
 	}
     }
