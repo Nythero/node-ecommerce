@@ -20,14 +20,15 @@ pipeline {
 	    }
 	    steps {
 		bat "docker run -d --rm -e MYSQL_ROOT_PASSWORD=${MYSQLPASSWORD} -e MYSQL_DATABASE=${DATABASE} -p ${MYSQLPORT}:3306 --name mysql-test mysql"
-		bat "docker run -d --rm --name node-test node-test"
+		bat "docker run -d --rm --name node-test node-test -p ${PORT}:${PORT}"
             }
 	}
     }
     post {
 	always {
     	    bat 'docker stop mysql-test'
-            bat 'docker stop node-test'
+            bat 'docker stop node-test' 
+            bat 'docker rmi node-test'
         }
     }
 }
