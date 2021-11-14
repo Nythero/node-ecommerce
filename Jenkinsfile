@@ -26,10 +26,12 @@ pipeline {
 		MYSQLUSER = 'root'
 		MYSQLTIMEOUT = 5000
 		MYSQLATTEMPTS = 3
+		MYSQLHOST = '172.20.0.21'
 	    }
 	    steps {
-		bat "docker run -d --rm -e MYSQL_ROOT_PASSWORD=${MYSQLPASSWORD} -e MYSQL_DATABASE=${DATABASE} -p ${MYSQLPORT}:3306 --name mysql-test mysql"
-		bat "docker run -d --rm -p ${PORT}:${PORT} -e MYSQLPASSWORD -e MYSQLPORT -e DATABASE -e PORT -e MYSQLUSER -e MYSQLTIMEOUT -e MYSQLATTEMPTS --name node-test node-test"
+                bat "docker network create test"
+		bat "docker run -d --rm --net test --ip ${MYSQLHOST} -e MYSQL_ROOT_PASSWORD=${MYSQLPASSWORD} -e MYSQL_DATABASE=${DATABASE} -p ${MYSQLPORT}:3306 --name mysql-test mysql"
+		bat "docker run -d --rm --net test -p ${PORT}:${PORT} -e MYSQLHOST -e MYSQLPASSWORD -e MYSQLPORT -e DATABASE -e PORT -e MYSQLUSER -e MYSQLTIMEOUT -e MYSQLATTEMPTS --name node-test node-test"
             }
 	}
     }
@@ -38,6 +40,7 @@ pipeline {
     	    bat 'docker stop mysql-test'
             bat 'docker stop node-test' 
             bat 'docker rmi node-test'
+	    bat 'docker network rm test'
         }
     }
 }
