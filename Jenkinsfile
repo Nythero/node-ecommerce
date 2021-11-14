@@ -14,6 +14,7 @@ pipeline {
 		}
 		bat 'docker build . -t node-test'
 		bat 'docker pull mysql'
+		bat 'docker pull postman/newman'
 		bat 'npm test'
             }
         }
@@ -33,7 +34,7 @@ pipeline {
                 bat "docker network create test --subnet=172.20.0.0/24"
 		bat "docker run -d --rm --net test --ip ${MYSQLHOST} -e MYSQL_ROOT_PASSWORD=${MYSQLPASSWORD} -e MYSQL_DATABASE=${DATABASE} -p ${MYSQLPORT}:3306 --name mysql-test mysql"
 		bat "docker run -d --rm --net test --ip ${HOST} -p ${PORT}:${PORT} -e MYSQLHOST -e MYSQLPASSWORD -e MYSQLPORT -e DATABASE -e PORT -e MYSQLUSER -e MYSQLTIMEOUT -e MYSQLATTEMPTS --name node-test node-test"
-		bat "newman --env-var HOST=${HOST} --env-var PORT=${PORT}"
+		bat "docker run -d -rm --net test --ip 172.20.0.23 -v ./tests/Eccomerce.postman_collection.json:/collection.json --name newman-test newman-docker run --env-var HOST=${HOST} --env-var PORT=${PORT}"
             }
 	}
     }
@@ -41,6 +42,7 @@ pipeline {
 	always {
     	    bat 'docker stop mysql-test'
             bat 'docker stop node-test' 
+	    bat 'docker stop newman-test'
             bat 'docker rmi node-test'
 	    bat 'docker network rm test'
         }
