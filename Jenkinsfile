@@ -3,12 +3,14 @@ pipeline {
     stages {
         stage('build') {
             steps {
-		try {
-		    bat 'echo Deleting node-test docker image'
-		    bat 'docker rmi node-test'
-		}
-		catch (err) {
-		    bat 'echo node-test docker image does not exist. Continuing with the process'
+		script {
+		    try {
+		        bat 'echo Deleting node-test docker image'
+		        bat 'docker rmi node-test'
+		    }
+		    catch (err) {
+		        bat 'echo node-test docker image does not exist. Continuing with the process'
+		    }
 		}
 		bat 'docker build . -t node-test'
 		bat 'docker pull mysql'
