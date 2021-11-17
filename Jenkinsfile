@@ -17,8 +17,10 @@ pipeline {
 	    stages {
     		stage('setup mysql') {
     		    agent {
-    			node {
+    			docker {
+			    image 'mysql-agent'
     			    label 'mysql-agent'
+			    args '-e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=test -e MYSQLHOST=172.20.0.21'
     			}
     		    }
 		    steps {
