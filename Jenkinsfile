@@ -10,4 +10,5 @@ pipeline {
 	    sh npm install
 	    npm test
         }
+    }
 }
