@@ -21,6 +21,7 @@ pipeline {
     			    label 'mysql-agent'
     			}
     		    }
+		    steps {}
 		}
 		stage('integration test') {
     		    agent {
