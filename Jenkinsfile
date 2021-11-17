@@ -8,7 +8,9 @@ pipeline {
 		}
 	    }
 	    steps{
-		sh npm install
+		step {
+		    sh npm install
+		}
 		npm test
 	    }
         }
