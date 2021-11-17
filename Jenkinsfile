@@ -8,10 +8,8 @@ pipeline {
 		}
 	    }
 	    steps{
-		step {
-		    sh npm install
-		}
-		npm test
+		sh npm install
+		sh npm test
 	    }
         }
     }
