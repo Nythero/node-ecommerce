@@ -7,8 +7,10 @@ pipeline {
 		    image 'node-agent'
 		}
 	    }
-	    sh npm install
-	    npm test
+	    steps{
+		sh npm install
+		npm test
+	    }
         }
     }
 }
