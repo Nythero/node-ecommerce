@@ -23,6 +23,9 @@ pipeline {
 			    args '-e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=test -e MYSQLHOST=172.20.0.21'
     			}
     		    }
+		    options {
+			skipDefaultCheckout false
+		    }
 		    steps {
 			sh 'echo Starting mysql server'	
 		    }
