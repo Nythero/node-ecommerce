@@ -2,8 +2,12 @@ pipeline {
     agent none 
     stages {
         stage('build') {
-	     agent node-agent
-	     sh npm install
-	     npm test
+	    agent {
+		docker { 
+		    image 'node-agent'
+		}
+	    }
+	    sh npm install
+	    npm test
         }
 }
