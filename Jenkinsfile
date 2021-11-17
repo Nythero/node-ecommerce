@@ -21,7 +21,9 @@ pipeline {
     			    label 'mysql-agent'
     			}
     		    }
-		    steps {}
+		    steps {
+			sh 'echo Starting mysql server'	
+		    }
 		}
 		stage('integration test') {
     		    agent {
