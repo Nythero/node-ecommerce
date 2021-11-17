@@ -1,60 +1,9 @@
 pipeline {
-    agent any 
+    agent none 
     stages {
         stage('build') {
-            steps {
-		script {
-		    try {
-		        bat 'echo Deleting node-test docker image'
-		        bat 'docker rmi node-test'
-		    }
-		    catch (err) {
-		        bat 'echo node-test docker image does not exist. Continuing with the process'
-		    }
-		}
-		bat 'docker build . -t node-test'
-		bat 'docker pull mysql'
-		bat 'docker pull postman/newman'
-		bat 'npm test'
-            }
+	     agent node-agent
+	     sh npm install
+	     npm test
         }
-	stage('test') {
-	    environment {
-		MYSQLPASSWORD = 123456	
-		MYSQLPORT = 5000
-		DATABASE = 'test'
-		PORT = 3000
-		MYSQLUSER = 'root'
-		MYSQLTIMEOUT = 5000
-		MYSQLATTEMPTS = 3
-		MYSQLHOST = '172.20.0.21'
-		HOST = '172.20.0.22'
-	    }
-	    steps {
-                bat "docker network create test --subnet=172.20.0.0/24"
-		bat "docker run -d --rm --net test --ip ${MYSQLHOST} -e MYSQL_ROOT_PASSWORD=${MYSQLPASSWORD} -e MYSQL_DATABASE=${DATABASE} -p ${MYSQLPORT}:3306 --name mysql-test mysql"
-		bat "docker run -d --rm --net test --ip ${HOST} -p ${PORT}:${PORT} -e MYSQLHOST -e MYSQLPASSWORD -e MYSQLPORT -e DATABASE -e PORT -e MYSQLUSER -e MYSQLTIMEOUT -e MYSQLATTEMPTS --name node-test node-test"
-		bat "docker run -d --rm --net test --ip 172.20.0.23 -v ./tests/Eccomerce.postman_collection.json:/collection.json --name newman-test newman-docker run --env-var HOST=${HOST} --env-var PORT=${PORT}"
-            }
-	}
-    }
-    post {
-	always {
-	    catchError {
-     	        bat 'docker stop mysql-test'
-	    }
-	    catchError {
-                bat 'docker stop node-test' 
-	    }
-	    catchError {
-	        bat 'docker stop newman-test'
-	    }
-	    catchError {
-                bat 'docker rmi node-test'
-            }
-	    catchError {
-	        bat 'docker network rm test'
-	    }
-        }
-    }
 }
