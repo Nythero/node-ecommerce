@@ -1,7 +1,17 @@
 pipeline {
-	agent none 
+	agent none
+	environment {
+		MYSQLUSER = 'node'
+		MYSQLPASSWORD = 123456
+		MYSQLTIMEOUT = 5000
+		MYSQLATTEMPTS = 3
+		MYSQLPORT = 3306
+		PORT = 3000
+		MYSQL_DATABASE = 'test'
+ 		DATABASE = 'test'
+	}
 	stages {
-		stage('Setup MySQL') {
+		stage('Build') {
 			agent {
 				node {
 					label 'mysql-agent'
@@ -11,15 +21,45 @@ pipeline {
 				skipDefaultCheckout true
 			}
 			stages {
-				stage('Integration Testing') {
-					agent {
-						node {
-							label 'node-agent'
-						}
-					}
-					steps {
-						echo 'Hola Node'
-					}
+	            		stage('Get node-agent IP') {
+			                agent {
+	        				node {
+				                        label 'node-agent'
+	                			}
+			                }
+	                		steps {
+	                    			script {
+	                        			env.NODEIP = sh([script: 'hostname -I', returnStdout: true]).trim()
+	                        			sh "echo ${env.NODEIP}"
+	                    			}
+	                		}
+	            		}
+				stage('Setup MySQL') {
+					steps {    
+					        sh 'useradd sql'
+						sh 'chown -R sql /var/lib/mysql'
+						sh 'mysqld --user=sql --initialize-insecure'
+						sh "echo \"CREATE DATABASE ${MYSQL_DATABASE};\" >> initfile"
+						sh "echo \"CREATE USER ${MYSQLUSER}@${env.NODEIP} IDENTIFIED BY '${MYSQLPASSWORD}';\" >> initfile"
+						sh "echo \"GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO \"${MYSQLUSER}\"@\"${env.NODEIP}\";\" >> initfile"
+						sh 'nohup mysqld --user=sql --init-file=/workspace/ecommerce_jenkinsDocker/initfile &'
+						script {
+				                	env.MYSQLHOST = sh([script: 'hostname -I', returnStdout: true]).trim()
+					            	sh "echo mysql-agent running at ${env.MYSQLHOST}"
+					        }
+			            	}
+				}
+				stage('Setup Node') {
+	        	    		agent {
+	        	        		node {
+	        	            			label 'node-agent'
+	        	        		}
+	        	    		}
+	        	    		steps {
+	        	        		sh 'hostname -I'
+				            	sh 'npm install'
+				            	sh 'npm run server'
+	        	    		}
 				}
 			}
 		}
