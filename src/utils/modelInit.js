@@ -9,6 +9,7 @@ const modelInit = (model) => {
     catch(err) {
       console.log('Database schema failed to start');
       console.error(err);
+      process.exit(1);
     }
   };
 }

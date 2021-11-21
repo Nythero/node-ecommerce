@@ -28,5 +28,9 @@ const checkConnection = async (attempts = 3, time = 1000) => {
   pool.emit('MySQLServerReady');
 };
 
+process.on('exit', () => {
+  pool.end();
+});
+
 module.exports.checkConnection = checkConnection;
 module.exports.pool = pool;
