@@ -1,5 +1,6 @@
 const pool = require('./connection.js').pool;
 const uuid = require('../utils/uuid.js');
+const modelInit = require('../utils/modelInit.js');
 
 const sessions = {
 
@@ -56,6 +57,6 @@ const sessions = {
   }
 }
 
-pool.once('MySQLServerReady', () => sessions.create());
+pool.once('MySQLServerReady', modelInit(sessions));
 
 module.exports = sessions;

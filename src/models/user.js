@@ -1,4 +1,5 @@
 const pool = require('./connection.js').pool;
+const modelInit = require('../utils/modelInit.js');
 
 const user = {
 
@@ -40,9 +41,6 @@ const user = {
   }
 }
 
-pool.once('MySQLServerReady', async () => {
-  await user.create();
-  await user.init();
-});
+pool.once('MySQLServerReady', modelInit(user));
 
 module.exports = user;

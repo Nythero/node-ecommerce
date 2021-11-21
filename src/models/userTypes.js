@@ -1,4 +1,5 @@
 const pool = require('./connection.js').pool;
+const modelInit = require('./utils/modelInit.js');
 
 const userTypes = {
   async create() {
@@ -36,9 +37,6 @@ const userTypes = {
   }
 }
 
-pool.once('MySQLServerReady', async () => {
-  await userTypes.create();
-  await userTypes.init();
-});
+pool.once('MySQLServerReady', modelInit(userTypes));
 
 module.exports = userTypes;

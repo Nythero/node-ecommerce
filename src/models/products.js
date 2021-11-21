@@ -1,5 +1,6 @@
 const pool = require('./connection.js').pool;
 const mysql = require('mysql2');
+const modelInit = require('../utils/modelInit.js');
 
 const Query = require('../utils/query.js');
 
@@ -50,6 +51,6 @@ const products = {
 
 };
 
-pool.once('MySQLServerReady', () => products.create());
+pool.once('MySQLServerReady', modelInit(products));
 
 module.exports = products;
