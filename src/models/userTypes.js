@@ -37,6 +37,9 @@ const userTypes = {
   }
 }
 
-pool.once('MySQLServerReady', modelInit(userTypes));
+pool.once('MySQLServerReady', async () => {
+  await model.create();
+  await model.init();
+});
 
 module.exports = userTypes;
