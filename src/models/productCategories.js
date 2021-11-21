@@ -1,5 +1,5 @@
 const pool = require('./connection.js').pool;
-const modelInit = require('../utils/modelInit.js);
+const modelInit = require('../utils/modelInit.js');
 
 const productCategories = { 
   async create() {
