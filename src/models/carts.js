@@ -10,7 +10,7 @@ const carts = {
         Quantity INT UNSIGNED NOT NULL,
         PRIMARY KEY (Username, Product_id),
         FOREIGN KEY (Username) REFERENCES Users (Username),
-        FOREIGN KEY (Product_id) REFERENCES Products (id)
+        FOREIGN KEY (Product_id) REFERENCES Products (Id)
       );`);
     }
     catch (err) {
