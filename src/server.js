@@ -3,6 +3,14 @@ const app = express();
 
 require('dotenv').config();
 
+let httpServer;
+process.on('exit', (code) => {
+  httpServer.close();
+});
+
+require('./models/database.js').init();
+
+
 //Routes
 const index = require('./routes/index.js');
 const login = require('./routes/login.js');
@@ -36,13 +44,6 @@ app.use('/', index);
 app.use('*', notFound);
 app.use(handleSqlErrors);
 app.use(handleErrors);
-
-let httpServer;
-process.on('exit', (code) => {
-  httpServer.close();
-});
-
-require('./models/database.js').init();
 
 let main = async () => {
   await require('./models/connection.js').checkConnection(process.env.MYSQLATTEMPTS, process.env.MYSQLTIMEOUT);
