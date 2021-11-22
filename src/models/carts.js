@@ -2,6 +2,7 @@ const pool = require('./connection.js').pool;
 const modelInit = require('../utils/modelInit.js')
 
 const carts = {
+  name: 'Carts',
   async create() {
     try {
       await pool.query(`CREATE TABLE Carts (

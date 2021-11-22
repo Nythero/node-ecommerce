@@ -5,6 +5,7 @@ const modelInit = require('../utils/modelInit.js');
 const Query = require('../utils/query.js');
 
 const products = {
+  name: 'Products',
   async create() {
     try {
       await pool.query(`CREATE TABLE Products (

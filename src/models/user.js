@@ -2,6 +2,7 @@ const pool = require('./connection.js').pool;
 const modelInit = require('../utils/modelInit.js');
 
 const user = {
+  name: 'Users',
 
   async create() {
     try {

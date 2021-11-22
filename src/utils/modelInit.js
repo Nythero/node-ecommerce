@@ -1,7 +1,7 @@
 const modelInit = (model) => {
   return async () => { 
     try {
-      console.log(model);
+      console.log(`Initializing model: ${model.name}`);
       await model.create();
       if (model.hasOwnProperty('init')) {
         await model.init();

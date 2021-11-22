@@ -3,6 +3,7 @@ const uuid = require('../utils/uuid.js');
 const modelInit = require('../utils/modelInit.js');
 
 const sessions = {
+  name: 'Sessions',
 
   async create() {
     try {
