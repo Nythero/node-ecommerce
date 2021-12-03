@@ -40,6 +40,4 @@ const carts = {
   }
 };
 
-pool.once('MySQLServerReady', modelInit(carts));
-
 module.exports = carts;

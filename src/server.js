@@ -8,9 +8,6 @@ process.on('exit', (code) => {
   httpServer.close();
 });
 
-require('./models/database.js').init();
-
-
 //Routes
 const index = require('./routes/index.js');
 const login = require('./routes/login.js');
@@ -47,6 +44,7 @@ app.use(handleErrors);
 
 let main = async () => {
   await require('./models/connection.js').checkConnection(process.env.MYSQLATTEMPTS, process.env.MYSQLTIMEOUT);
+  await require('./models/database.js').init();
   httpServer = app.listen(process.env.PORT, () => console.log(`Server working on http://localhost:${process.env.PORT}`));
 }
 

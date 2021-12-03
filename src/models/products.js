@@ -52,6 +52,4 @@ const products = {
 
 };
 
-pool.once('MySQLServerReady', modelInit(products));
-
 module.exports = products;

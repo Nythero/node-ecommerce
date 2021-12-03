@@ -38,6 +38,4 @@ const userTypes = {
   }
 }
 
-pool.once('MySQLServerReady', modelInit(userTypes));
-
 module.exports = userTypes;

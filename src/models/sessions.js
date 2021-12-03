@@ -58,6 +58,4 @@ const sessions = {
   }
 }
 
-pool.once('MySQLServerReady', modelInit(sessions));
-
 module.exports = sessions;

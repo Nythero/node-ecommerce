@@ -42,6 +42,4 @@ const user = {
   }
 }
 
-pool.once('MySQLServerReady', modelInit(user));
-
 module.exports = user;
