@@ -55,11 +55,26 @@ pipeline {
 	        	            			label 'node-agent'
 	        	        		}
 	        	    		}
-	        	    		steps {
-	        	        		sh 'hostname -I'
-				            	sh 'npm install'
-				            	sh 'npm run server'
-	        	    		}
+	        	    		stages {
+	        	    			stage('Start Server') {    
+	        	    		        	steps {
+	        	        		        	sh 'hostname -I'
+					            	        sh 'npm install'
+					            	        sh 'nohup npm run server &'
+	        		    		        }
+	        		   		}
+	        	    			stage('Integration Test') {
+	        	    				agent {
+	        	    					node {
+									label 'node-agent'
+								}
+							}
+							steps {
+								sh 'npm install -g newman'
+								sh "newman run tests/Eccomerce.postman_collection.json --env-var \"PORT=${PORT}\" --env-var \"HOST=${env.NODEIP}\""
+							}
+						}
+					}
 				}
 			}
 		}
