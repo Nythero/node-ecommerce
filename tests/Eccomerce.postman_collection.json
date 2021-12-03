@@ -1136,7 +1136,7 @@
 									"script": {
 										"exec": [
 											"const jar = pm.cookies.jar();\r",
-											"jar.unset(\"http://localhost:3000/products\", \"sid\", (err) => console.error(err));"
+											"jar.unset(pm.environment.get('HOST'), \"sid\", (err) => console.error(err));"
 										],
 										"type": "text/javascript"
 									}
@@ -1560,7 +1560,7 @@
 									"script": {
 										"exec": [
 											"const jar = pm.cookies.jar();\r",
-											"jar.set(pm.request.url, \"sid\", pm.globals.get(\"session_id\"), err => console.error(err));"
+											"jar.set(pm.environment.get('HOST'), \"sid\", pm.globals.get(\"session_id\"), err => console.error(err));"
 										],
 										"type": "text/javascript"
 									}
